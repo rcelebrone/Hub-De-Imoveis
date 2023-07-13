@@ -1,0 +1,23 @@
+@startuml Hub de imóveis
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(per_pi, "Proprietário de imóvel", "Um proprietário de um imóvel para locação.")
+System_Boundary(sysbou_hi, "Hub de imóveis") {
+    Container(con_ai, "API de integração", "C# com dotnet core", "Fornece interfaces de integração via a JSON/HTTP para dados de imóveis.")
+    Container(con_ag, "API gateway", "Kong API gateway", "Fornece funcionalidades de um API gateway.")
+    Container_Ext(conext_asc, "Aplicação SaaS para cadastro", "Google forms", "Fornece funcionalidades para proprietários cadastrarem e atualizarem imóveis.")
+    Container_Ext(conext_apes, "Aplicação PaaS para execução de scripts", "Google apps script", "Executa scripts por meio de eventos programados.")
+    Container_Ext(datext_md, "Banco de dados", "Banco de dados MongoDB (PaaS)", "Armazena de forma persistente os dados dos imóveis cadastrados pelos proprietários.")
+
+    Rel(per_pi, conext_asc, "Usa")
+    Rel(con_ag, con_ai, "Recupera dados de", "JSON/HTTPS")
+    Rel_L(conext_asc, conext_apes, "Gera eventos para")
+    Rel(conext_apes, con_ag, "Autoriza no gateway e grava dados de imóveis atráves de", "HTTPS")
+    Rel_R(con_ai, datext_md, "Recupera dados de", "HTTPS")
+
+}
+System_Ext(sysext_pi, "Plataformas imobiliárias", "Plataformas imobiliárias que fazem integração para consultar dados de imóveis.")
+Rel_L(sysext_pi, con_ag, "Autoriza no gateway e consulta dados de imóveis atráves de", "JSON/HTTPS")
+@enduml

@@ -1,0 +1,15 @@
+@startuml Visão geral
+!include https://raw.githubusercontent.com/adrianvlupu/C4-PlantUML/latest/C4_Context.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(per_pi, "Proprietário de imóvel", "Um proprietário de um imóvel para locação.")
+System(sys_hi, "Hub de imóveis", "Permite cadastrar, alterar e consultar imóveis.")
+System_Ext(sysext_i, "Plataformas imobiliárias", "Plataformas imobiliárias que fazem integração para consultar dados de imóveis.")
+Person_Ext(perext_pi, "Locatário de imóvel", "Uma pessoa interessada em locar um imóvel.")
+
+Rel(per_pi, sys_hi, "Usa")
+Rel(sysext_i, sys_hi, "Consulta dados de")
+Rel(perext_pi, sysext_i, "Usa")
+
+@enduml

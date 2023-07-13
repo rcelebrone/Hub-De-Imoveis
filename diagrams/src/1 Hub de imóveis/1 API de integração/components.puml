@@ -1,0 +1,31 @@
+@startuml API de integração
+
+actor "proprietério de imóvel" as per_pi
+actor "locatário de imóvel" as per_li
+
+component "Plataformas integradoras" as sysext_i
+component "Google Apps Script" as conext_apes <<job>>
+component "Google forms" as conext_asc <<responsive>>
+
+package "Hub de imóveis" {
+    component "API Gateway" as con_ag <<middleware>>
+
+    component "API de integração" as pac_ai <<microservice>> {
+        component "Imoveis" as com_ic <<controller>>
+    }
+
+    component "MongoDB" as datext_md <<database>>
+
+}
+
+per_pi ..> conext_asc
+per_li ..> sysext_i
+
+con_ag <|..> pac_ai : " <<Rest>>"
+sysext_i <|..> con_ag : " <<Rest, JWT>>"
+conext_apes <|..> con_ag : " <<Rest, JWT>>"
+
+conext_asc <.. conext_apes 
+com_ic ..> datext_md : " <<Rest>>"
+
+@enduml
